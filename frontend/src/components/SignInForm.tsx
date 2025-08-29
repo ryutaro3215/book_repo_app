@@ -42,7 +42,6 @@ export default function SignInForm() {
           <span className="text-red-500 text-sm">{errors.email.message}</span>
         )}
       </div>
-
       {/* Password */}
       <div>
         <label
@@ -62,13 +61,13 @@ export default function SignInForm() {
           </span>
         )}
       </div>
-
       <button
         type="submit"
         className="w-full rounded-md bg-indigo-600 text-white py-2 font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
       >
         Login
       </button>
+      {/* navigating to SingUp page */}
       <p className="text-sm text-center text-gray-600">
         If you don't have your account, please{" "}
         <Link
@@ -76,6 +75,18 @@ export default function SignInForm() {
           className="font-medium text-indigo-600 hover:text-indigo-500 underline"
         >
           Sign Up
+        </Link>
+        .
+      </p>
+
+      {/* Navigating to Password Reset page */}
+      <p className="text-sm text-center text-gray-600">
+        If you forget your password, please{" "}
+        <Link
+          to="/resetpassword"
+          className="font-medium text-indigo-600 hover:text-indigo-500 underline"
+        >
+          Reset your Password
         </Link>
         .
       </p>
