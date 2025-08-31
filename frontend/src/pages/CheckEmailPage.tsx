@@ -1,5 +1,3 @@
-import { Link } from "react-router";
-
 export default function CheckEmailPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-900 px-4">
