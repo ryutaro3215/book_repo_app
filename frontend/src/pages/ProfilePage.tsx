@@ -1,9 +1,9 @@
-import { Outlet } from "react-router";
+import Profile from "../components/Profile";
 
-export default function SignUpPage() {
+export default function ProfilePage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Outlet />
+      <Profile />
     </div>
   );
 }
