@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../api/SupabaseAuth";
 import type { Session } from "@supabase/supabase-js";
 import type { AuthContextType } from "../types/AuthContext";
-import { useNavigate } from "react-router";
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
@@ -11,7 +10,7 @@ const AuthContext = createContext<AuthContextType>({
   signup: async () => {},
   signin: async () => {},
   signout: async () => {},
-  updagePassword: async () => {},
+  updatePassword: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -46,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password,
     username,
   }) => {
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: email,
       password: password,
       options: {
