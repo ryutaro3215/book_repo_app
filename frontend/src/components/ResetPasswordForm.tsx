@@ -4,8 +4,12 @@ import type { NewPasswordInput } from "../schemas/User";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SubmitHandler } from "react-hook-form";
+import { useAuth } from "../providers/AuthProvider";
+import { useNavigate } from "react-router";
 
 export default function ResetPasswordForm() {
+  const { updatePassword } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,7 +18,17 @@ export default function ResetPasswordForm() {
     resolver: zodResolver(NewPasswordSchema),
   });
 
-  const onSubmit: SubmitHandler<NewPasswordInput> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<NewPasswordInput> = async (
+    values: NewPasswordInput,
+  ) => {
+    try {
+      await updatePassword({ password: values.newPassword });
+      alert("Success update password!!");
+    } catch (e: any) {
+      alert(e.message ?? "Password reset failed");
+    }
+    navigate("/auth/signin", { replace: true });
+  };
 
   return (
     <form
@@ -24,26 +38,6 @@ export default function ResetPasswordForm() {
       <h2 className="text-2xl font-semibold text-center text-gray-800">
         Reset Password
       </h2>
-      {/* Current Password*/}
-      <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Current Password
-        </label>
-        <input
-          type="password"
-          {...register("currentPassword", { required: true })}
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50"
-        />
-        {errors.currentPassword && (
-          <span className="text-red-500 text-sm">
-            {errors.currentPassword.message}
-          </span>
-        )}
-      </div>
-
       {/* New Password */}
       <div>
         <label

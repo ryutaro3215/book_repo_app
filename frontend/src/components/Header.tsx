@@ -1,31 +1,63 @@
 import "../styles/global.css";
 import { Link } from "react-router";
+import { useAuth } from "../providers/AuthProvider";
+import { useNavigate } from "react-router";
 
 export default function Header() {
-  return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:bg-neutral-900/80 dark:border-neutral-800">
-      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 h-14 md:h-16">
-        <div className="flex h-full items-center justify-between gap-3 md:gap-6">
-          <h1 className="text-base md:text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
-            <Link
-              to="/"
-              className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-            >
-              Book Repository
-            </Link>
-          </h1>
+  const { session, signout } = useAuth();
+  const navigate = useNavigate();
+  const isLogin = !!session;
 
-          <nav aria-label="Header actions">
+  const handleSignOut = async () => {
+    try {
+      await signout();
+      navigate("/", { replace: true });
+    } catch (e: any) {
+      alert(e.message ?? "Sign out failed");
+    }
+  };
+
+  return (
+    <header className="sticky top-0 z-30 border-b bg-white/80 backdrop-blur dark:bg-neutral-900/70 dark:border-neutral-800">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <h1 className="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          <Link to="/">
+            Book <span className="text-indigo-600">Repository</span>
+          </Link>
+        </h1>
+
+        {!isLogin ? (
+          <nav className="flex items-center gap-3" aria-label="Header actions">
             <Link
-              to="/signin"
-              className="rounded-md px-2 py-1 md:px-3 md:py-1.5 text-sm font-medium
-                     text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
-                     dark:text-blue-400 dark:hover:text-blue-300"
+              to="/auth/signin"
+              className="rounded-md px-3 py-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
               Sign in
             </Link>
+            <Link
+              to="/auth/signup"
+              className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+            >
+              Create account
+            </Link>
           </nav>
-        </div>
+        ) : (
+          <nav className="flex items-center gap-3" aria-label="Header actions">
+            <Link
+              to="/profile"
+              className="rounded-md px-3 py-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+            >
+              Profile
+            </Link>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+            >
+              Sign out
+            </button>
+          </nav>
+        )}
       </div>
     </header>
   );

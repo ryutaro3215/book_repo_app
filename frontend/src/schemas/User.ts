@@ -26,36 +26,20 @@ export const SignUpSchema = z.object({
     ),
 });
 
-export const NewPasswordSchema = z
-  .object({
-    currentPassword: z.string().min(1, { message: "Please input password" }),
-    newPassword: z
-      .string()
-      .min(8, { message: "more than 8 letters" })
-      .regex(
-        /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i,
-        "パスワードは半角英数字混合で入力してください",
-      ),
-    newPasswordConfirm: z
-      .string()
-      .min(1, { message: "Please input new password again" }),
-  })
-  .superRefine(({ currentPassword, newPassword, newPasswordConfirm }, ctx) => {
-    if (newPassword !== newPasswordConfirm) {
-      ctx.addIssue({
-        path: ["newPasswordConfirm"],
-        code: "custom",
-        message: "Not match new password",
-      });
-    }
-    if (currentPassword === newPassword) {
-      ctx.addIssue({
-        path: ["newPassword"],
-        code: "custom",
-        message: "Can't set current password to new password",
-      });
-    }
-  });
+export const NewPasswordSchema = z.object({
+  newPassword: z
+    .string()
+    .min(8, { message: "more than 8 letters" })
+    .max(100, { message: "Password must be at most 100 characters" })
+    .regex(/[a-z]/i, { message: "Password must contain at least one letter" })
+    .regex(/\d/, { message: "Password must contain at least one number" })
+    .regex(/^[a-z\d]+$/i, {
+      message: "Password can only contain letters and numbers",
+    }),
+  newPasswordConfirm: z
+    .string()
+    .min(1, { message: "Please input new password again" }),
+});
 
 export type SignInInput = z.infer<typeof SignInSchema>;
 export type SignUpInput = z.infer<typeof SignUpSchema>;
